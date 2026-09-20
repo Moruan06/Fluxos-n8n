@@ -1,0 +1,435 @@
+{
+  "id": "bLxZ5QJTuAJDyFaW",
+  "name": "Backup GitHub",
+  "active": true,
+  "activeVersionId": "06cca4fc-c5cb-4697-8c41-a539d12d6b28",
+  "createdAt": "2026-09-20T01:00:18.315Z",
+  "updatedAt": "2026-09-20T01:47:14.885Z",
+  "isArchived": false,
+  "versionId": "4a3b32b9-5458-4a03-8a53-065f06d93258",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "789f14a8-0a4a-4e21-ae1f-f2a3467919d7",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        176,
+        0
+      ],
+      "id": "fe8593fe-7e10-492e-8583-e0335c629957",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "pyU7jK3RndTqVISo",
+          "name": "Moruan n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "944972f3-33e1-4c57-910f-61f2a6e332ee",
+              "leftValue": "={{ $json.updatedAt }}",
+              "rightValue": "={{ $now.minus(1, 'hour') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        400,
+        0
+      ],
+      "id": "9f48ead7-0ac2-48af-a9ba-b3bda660e787",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/Moruan06",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Fluxos-n8n",
+          "mode": "list",
+          "cachedResultName": "Fluxos-n8n",
+          "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+        },
+        "filePath": "=workflows/{{ $json.id }}-{{ $json.name.replace(/\\W+/g, '-') }}.json",
+        "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+        "commitMessage": "=Update: {{ $json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        -16
+      ],
+      "id": "7cf7e285-64c5-49c1-a289-dbfdc780c501",
+      "name": "Edit a file",
+      "webhookId": "5a851882-8f5d-4749-b087-18e135be566e",
+      "credentials": {
+        "githubApi": {
+          "id": "gGIzg3elk92MKWbm",
+          "name": "Moruan GitHub"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/Moruan06",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Fluxos-n8n",
+          "mode": "list",
+          "cachedResultName": "Fluxos-n8n",
+          "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+        },
+        "filePath": "=workflows/ {{ $('Get many workflows').item.json.id }}-{{ $('Get many workflows').item.json.name.replace(/\\W+/g, '-') }}.json",
+        "fileContent": "={{ JSON.stringify($('Get many workflows').item.json, null, 2) }}",
+        "commitMessage": "=Criado: {{ $('Get many workflows').item.json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        -16
+      ],
+      "id": "f2ca58e2-d6df-496c-a930-b92df1723190",
+      "name": "Create a file",
+      "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
+      "credentials": {
+        "githubApi": {
+          "id": "gGIzg3elk92MKWbm",
+          "name": "Moruan GitHub"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a file": {
+      "main": [
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "bLxZ5QJTuAJDyFaW",
+      "projectId": "8hi4bD9zCoonCi82",
+      "createdAt": "2026-09-20T01:00:18.318Z",
+      "updatedAt": "2026-09-20T01:00:18.318Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "06cca4fc-c5cb-4697-8c41-a539d12d6b28",
+    "workflowId": "bLxZ5QJTuAJDyFaW",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          0,
+          0
+        ],
+        "id": "789f14a8-0a4a-4e21-ae1f-f2a3467919d7",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.n8n",
+        "typeVersion": 1,
+        "position": [
+          176,
+          0
+        ],
+        "id": "fe8593fe-7e10-492e-8583-e0335c629957",
+        "name": "Get many workflows",
+        "credentials": {
+          "n8nApi": {
+            "id": "pyU7jK3RndTqVISo",
+            "name": "Moruan n8n"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "944972f3-33e1-4c57-910f-61f2a6e332ee",
+                "leftValue": "={{ $json.updatedAt }}",
+                "rightValue": "={{ $now.minus(1, 'hour') }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "after"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          400,
+          0
+        ],
+        "id": "9f48ead7-0ac2-48af-a9ba-b3bda660e787",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "edit",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "=workflows/{{ $json.id }}-{{ $json.name.replace(/\\W+/g, '-') }}.json",
+          "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+          "commitMessage": "=Update: {{ $json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          640,
+          -16
+        ],
+        "id": "7cf7e285-64c5-49c1-a289-dbfdc780c501",
+        "name": "Edit a file",
+        "webhookId": "5a851882-8f5d-4749-b087-18e135be566e",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "=workflows/{{ $json.id }}-{{ $json.name.replace(/\\W+/g, '-') }}.json",
+          "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+          "commitMessage": "=Criado: {{ $json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          800,
+          -16
+        ],
+        "id": "f2ca58e2-d6df-496c-a930-b92df1723190",
+        "name": "Create a file",
+        "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get many workflows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many workflows": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Edit a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit a file": {
+        "main": [
+          [
+            {
+              "node": "Create a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Moruan Matar",
+    "name": "v1",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-09-20T01:32:59.742Z",
+    "updatedAt": "2026-09-20T01:39:20.000Z"
+  }
+}
