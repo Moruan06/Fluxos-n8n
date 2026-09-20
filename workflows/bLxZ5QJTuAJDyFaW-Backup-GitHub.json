@@ -2,11 +2,11 @@
   "id": "bLxZ5QJTuAJDyFaW",
   "name": "Backup GitHub",
   "active": true,
-  "activeVersionId": "fd29645b-4426-42ad-87b0-b38772c084e8",
+  "activeVersionId": "942054fb-126f-4926-ba12-ac25fa54c057",
   "createdAt": "2026-09-20T01:00:18.315Z",
-  "updatedAt": "2026-09-20T02:30:23.499Z",
+  "updatedAt": "2026-09-20T02:31:10.623Z",
   "isArchived": false,
-  "versionId": "fd29645b-4426-42ad-87b0-b38772c084e8",
+  "versionId": "942054fb-126f-4926-ba12-ac25fa54c057",
   "triggerCount": 1,
   "nodes": [
     {
@@ -14,7 +14,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes"
+              "field": "hours"
             }
           ]
         }
@@ -282,7 +282,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "fd29645b-4426-42ad-87b0-b38772c084e8",
+    "versionId": "942054fb-126f-4926-ba12-ac25fa54c057",
     "workflowId": "bLxZ5QJTuAJDyFaW",
     "nodes": [
       {
@@ -290,7 +290,7 @@
           "rule": {
             "interval": [
               {
-                "field": "minutes"
+                "field": "hours"
               }
             ]
           }
@@ -526,10 +526,10 @@
     },
     "nodeGroups": [],
     "authors": "Moruan Matar",
-    "name": "Version fd29645b",
+    "name": "Version 942054fb",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-09-20T02:20:00.083Z",
-    "updatedAt": "2026-09-20T02:27:35.000Z"
+    "createdAt": "2026-09-20T02:31:10.624Z",
+    "updatedAt": "2026-09-20T02:31:13.000Z"
   }
 }
