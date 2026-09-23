@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-09-21T23:13:04.845Z",
-  "updatedAt": "2026-09-22T00:32:13.525Z",
+  "updatedAt": "2026-09-23T20:55:41.611Z",
   "isArchived": false,
-  "versionId": "2e53cfd3-a496-475c-9a73-cde9d00b6bed",
+  "versionId": "7fe2295e-9110-4a4c-80c6-a0012bfe2e9f",
   "triggerCount": 0,
   "nodes": [
     {
@@ -24,9 +24,173 @@
       "id": "e84cd292-b988-4fe9-b5b3-a504633bfb97",
       "name": "Webhook",
       "webhookId": "961af4a5-c7e7-4832-bfea-8cd5f5b56995"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.event }}",
+                    "rightValue": "PURCHASE_BILLET_PRINTED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0d969749-b648-4690-b39e-6daf28a3a3e7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pix gerado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "99ed1bea-78c8-41cc-a5b1-7a7b902f2689",
+                    "leftValue": "={{ $json.body.event }}",
+                    "rightValue": "PURCHASE_OUT_OF_SHOPPING_CART",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Abandono de carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5274636-daac-4104-b73b-223b7a07a922",
+                    "leftValue": "={{ $json.body.event }}",
+                    "rightValue": "PURCHASE_APPROVED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Compra Aprovada"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -16
+      ],
+      "id": "84d43878-67cb-4233-8612-957cc6176121",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "addMessage",
+        "agentId": "3F946380B17D0172F60C62857FE1FE3B"
+      },
+      "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
+      "typeVersion": 1,
+      "position": [
+        560,
+        -32
+      ],
+      "id": "5d236b52-6175-46cb-bb17-7b7c6a39dfd8",
+      "name": "Add context to an agent",
+      "credentials": {
+        "gptMakerApi": {
+          "id": "ImEi7bfLOKapaiCY",
+          "name": "Moruan GPTMaker"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "conversation"
+      },
+      "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -32
+      ],
+      "id": "8ed1d03d-44bb-41ed-973f-7055b6c21509",
+      "name": "Talk to an agent",
+      "credentials": {
+        "gptMakerApi": {
+          "id": "ImEi7bfLOKapaiCY",
+          "name": "Moruan GPTMaker"
+        }
+      }
     }
   ],
-  "connections": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Add context to an agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add context to an agent": {
+      "main": [
+        [
+          {
+            "node": "Talk to an agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
   "nodeGroups": [],
   "settings": {
     "executionOrder": "v1",
@@ -34,7 +198,9 @@
   },
   "staticData": null,
   "pinData": {},
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "tags": [],
   "shared": [
     {
