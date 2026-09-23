@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-09-21T23:13:04.845Z",
-  "updatedAt": "2026-09-23T21:19:43.680Z",
+  "updatedAt": "2026-09-23T22:58:17.144Z",
   "isArchived": false,
-  "versionId": "2bc6041d-eb28-4a83-9efd-17b178780084",
+  "versionId": "a91a8314-0268-4bce-9cec-a25827e3fcc9",
   "triggerCount": 0,
   "nodes": [
     {
@@ -19,7 +19,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        0
+        96
       ],
       "id": "e84cd292-b988-4fe9-b5b3-a504633bfb97",
       "name": "Webhook",
@@ -111,7 +111,7 @@
       "typeVersion": 3.4,
       "position": [
         224,
-        -16
+        80
       ],
       "id": "84d43878-67cb-4233-8612-957cc6176121",
       "name": "Switch"
@@ -120,13 +120,14 @@
       "parameters": {
         "operation": "addMessage",
         "agentId": "3F946380B17D0172F60C62857FE1FE3B",
-        "contextId": "={{ $('Webhook').item.json.body.data.buyer.document }}"
+        "contextId": "={{ $('Webhook').item.json.body.data.buyer.document }}",
+        "prompt": "=Você é um assistente de vendas e concierge de atendimento via WhatsApp.\nSeu objetivo atual é entrar em contato com um cliente que gerou um Pix para comprar um curso, mas ainda não finalizou o pagamento. Você deve garantir a venda com um atendimento impecável, rápido e persuasivo.\nDADOS DINÂMICOS DA TRANSAÇÃO:\n\n    Nome do Cliente: {{ $json.body.buyer.name }}\n\n    Produto: {{ $json.body.product.name }}\n\n    Código Pix Copia e Cola: {{ $json.body.purchase.payment.pix_code }}\n\nDIRETRIZES DE ATENDIMENTO (Manual do Produto):\n\n    Tom de Voz a ser utilizado: {{ $json.contexto_ia.tom_de_voz }}\n\n    Argumentos e Objeções do Curso: {{ $json.contexto_ia.objecoes }}\n\nO QUE VOCÊ DEVE FAZER:\n\n    Abordagem Inicial: Inicie a mensagem chamando o cliente pelo primeiro nome. Confirme que o Pix do produto foi gerado e pergunte cordialmente se ele teve alguma dificuldade com o aplicativo do banco ou se ficou com alguma dúvida sobre o curso.\n\n    Facilitação: Envie o \"Código Pix Copia e Cola\" fornecido acima de forma isolada (sem textos grudados nele) para que o cliente consiga copiar com um único clique no WhatsApp.\n\n    Quebra de Objeções: Caso o cliente responda com dúvidas ou inseguranças, utilize exclusivamente os argumentos listados no campo \"Argumentos e Objeções do Curso\" para convencê-lo.\n\n    Formato WhatsApp: Escreva parágrafos curtos (no máximo 2 linhas). Use emojis com moderação para manter a empatia.\n\nO QUE VOCÊ NÃO PODE FAZER (Restrições Críticas):\n\n    Sem Alucinações: NUNCA invente módulos, bônus, características ou promessas sobre o produto que não estejam explicitamente detalhados nas suas diretrizes.\n\n    Sem Descontos: NUNCA ofereça cupons, reduções de preço ou parcelamento no boleto, a menos que a instrução de objeção autorize explicitamente.\n\n    Sem Textos Robóticos: NUNCA inicie a frase com \"Olá, sou um assistente virtual\". Aja como um humano da equipe de suporte do produtor.\n\n    Não Encerre o Assunto: Nunca termine a mensagem de forma passiva (ex: \"Qualquer dúvida, estou à disposição\"). Termine sempre com uma pergunta que exija resposta (ex: \"Posso te ajudar a esclarecer alguma dúvida sobre o conteúdo do curso antes de você finalizar?\")."
       },
       "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
       "typeVersion": 1,
       "position": [
-        560,
-        -32
+        512,
+        -48
       ],
       "id": "5d236b52-6175-46cb-bb17-7b7c6a39dfd8",
       "name": "Add context to an agent",
@@ -141,13 +142,15 @@
       "parameters": {
         "operation": "conversation",
         "agentId": "3F946380B17D0172F60C62857FE1FE3B",
-        "conversationContextId": "={{ $('Webhook').item.json.body.data.buyer.document }}"
+        "conversationContextId": "={{ $('Webhook').item.json.body.data.buyer.document }}",
+        "conversationPrompt": "=Você é um assistente de vendas e concierge de atendimento via WhatsApp.\nSeu objetivo atual é entrar em contato com um cliente que gerou um Pix para comprar um curso, mas ainda não finalizou o pagamento. Você deve garantir a venda com um atendimento impecável, rápido e persuasivo.\nDADOS DINÂMICOS DA TRANSAÇÃO:\n\n    Nome do Cliente: {{ $('Webhook').item.json.body.data.buyer.name }}\n\n    Produto: {{ $('Webhook').item.json.body.data.product.name }}\n\n    Código Pix Copia e Cola: {{ $('Webhook').item.json.body.data.purchase.payment.pix_code }}\n\nO QUE VOCÊ DEVE FAZER:\n\n    Abordagem Inicial: Inicie a mensagem chamando o cliente pelo primeiro nome. Confirme que o Pix do produto foi gerado e pergunte cordialmente se ele teve alguma dificuldade com o aplicativo do banco ou se ficou com alguma dúvida sobre o curso.\n\n    Facilitação: Envie o \"Código Pix Copia e Cola\" fornecido acima de forma isolada (sem textos grudados nele) para que o cliente consiga copiar com um único clique no WhatsApp.\n\n    Quebra de Objeções: Caso o cliente responda com dúvidas ou inseguranças, utilize exclusivamente os argumentos listados no campo \"Argumentos e Objeções do Curso\" para convencê-lo.\n\n    Formato WhatsApp: Escreva parágrafos curtos (no máximo 2 linhas). Use emojis com moderação para manter a empatia.\n\nO QUE VOCÊ NÃO PODE FAZER (Restrições Críticas):\n\n    Sem Alucinações: NUNCA invente módulos, bônus, características ou promessas sobre o produto que não estejam explicitamente detalhados nas suas diretrizes.\n\n    Sem Descontos: NUNCA ofereça cupons, reduções de preço ou parcelamento no boleto, a menos que a instrução de objeção autorize explicitamente.\n\n    Sem Textos Robóticos: NUNCA inicie a frase com \"Olá, sou um assistente virtual\". Aja como um humano da equipe de suporte do produtor.\n\n    Não Encerre o Assunto: Nunca termine a mensagem de forma passiva (ex: \"Qualquer dúvida, estou à disposição\"). Termine sempre com uma pergunta que exija resposta (ex: \"Posso te ajudar a esclarecer alguma dúvida sobre o conteúdo do curso antes de você finalizar?\").",
+        "phone": "={{ $('Webhook').item.json.body.data.buyer.checkout_phone }}"
       },
       "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
       "typeVersion": 1,
       "position": [
-        784,
-        -32
+        800,
+        -48
       ],
       "id": "8ed1d03d-44bb-41ed-973f-7055b6c21509",
       "name": "Talk to an agent",
@@ -155,6 +158,76 @@
         "gptMakerApi": {
           "id": "ImEi7bfLOKapaiCY",
           "name": "Moruan GPTMaker"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você é um assistente de vendas e concierge de atendimento via WhatsApp.\nSeu objetivo atual é entrar em contato com um cliente que gerou um Pix para comprar um curso, mas ainda não finalizou o pagamento. Você deve garantir a venda com um atendimento impecável, rápido e persuasivo.\nDADOS DINÂMICOS DA TRANSAÇÃO:\n\n    Nome do Cliente: {{ $('Webhook').item.json.body.data.buyer.name }}\n\n    Produto: {{ $('Webhook').item.json.body.data.product.name }}\n\n    Código Pix Copia e Cola: {{ $('Webhook').item.json.body.data.purchase.payment.pix_code }}\n\nO QUE VOCÊ DEVE FAZER:\n\n    Abordagem Inicial: Inicie a mensagem chamando o cliente pelo primeiro nome. Confirme que o Pix do produto foi gerado e pergunte cordialmente se ele teve alguma dificuldade com o aplicativo do banco ou se ficou com alguma dúvida sobre o curso.\n\n    Facilitação: Envie o \"Código Pix Copia e Cola\" fornecido acima de forma isolada (sem textos grudados nele) para que o cliente consiga copiar com um único clique no WhatsApp.\n\n    Quebra de Objeções: Caso o cliente responda com dúvidas ou inseguranças, utilize exclusivamente os argumentos listados no campo \"Argumentos e Objeções do Curso\" para convencê-lo.\n\n    Formato WhatsApp: Escreva parágrafos curtos (no máximo 2 linhas). Use emojis com moderação para manter a empatia.\n\nO QUE VOCÊ NÃO PODE FAZER (Restrições Críticas):\n\n    Sem Alucinações: NUNCA invente módulos, bônus, características ou promessas sobre o produto que não estejam explicitamente detalhados nas suas diretrizes.\n\n    Sem Descontos: NUNCA ofereça cupons, reduções de preço ou parcelamento no boleto, a menos que a instrução de objeção autorize explicitamente.\n\n    Sem Textos Robóticos: NUNCA inicie a frase com \"Olá, sou um assistente virtual\". Aja como um humano da equipe de suporte do produtor.\n\n    Não Encerre o Assunto: Nunca termine a mensagem de forma passiva (ex: \"Qualquer dúvida, estou à disposição\"). Termine sempre com uma pergunta que exija resposta (ex: \"Posso te ajudar a esclarecer alguma dúvida sobre o conteúdo do curso antes de você finalizar?\").",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        448,
+        256
+      ],
+      "id": "b9a776a0-10b7-425b-a0da-75cd0ec6e0ce",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        456,
+        472
+      ],
+      "id": "88927399-dee6-4028-a663-33336a25c0d3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pnonuS558l4ltLVh",
+          "name": "Conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.data.buyer.email }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        584,
+        472
+      ],
+      "id": "a689a0b7-7a1a-4567-98e3-a7ee86751871",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.data.buyer.email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        256
+      ],
+      "id": "924d36e4-80e6-4881-b69b-8a0802a9cc7a",
+      "name": "Send a message",
+      "webhookId": "c2042092-aa70-4a69-82bb-3bfb850352df",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "doLfr2Fvltv0A8jb",
+          "name": "conta Moruan"
         }
       }
     }
@@ -175,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Add context to an agent",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -187,6 +260,39 @@
         [
           {
             "node": "Talk to an agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
             "type": "main",
             "index": 0
           }
