@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-09-21T23:13:04.845Z",
-  "updatedAt": "2026-09-23T22:58:17.144Z",
+  "updatedAt": "2026-09-23T23:17:35.994Z",
   "isArchived": false,
-  "versionId": "a91a8314-0268-4bce-9cec-a25827e3fcc9",
+  "versionId": "5036c330-c035-48f3-bfff-88a3eb8ab8a0",
   "triggerCount": 0,
   "nodes": [
     {
@@ -18,8 +18,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        96
+        -912,
+        400
       ],
       "id": "e84cd292-b988-4fe9-b5b3-a504633bfb97",
       "name": "Webhook",
@@ -110,8 +110,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        224,
-        80
+        -688,
+        384
       ],
       "id": "84d43878-67cb-4233-8612-957cc6176121",
       "name": "Switch"
@@ -126,8 +126,8 @@
       "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
       "typeVersion": 1,
       "position": [
-        512,
-        -48
+        -912,
+        928
       ],
       "id": "5d236b52-6175-46cb-bb17-7b7c6a39dfd8",
       "name": "Add context to an agent",
@@ -149,8 +149,8 @@
       "type": "@gptmaker/n8n-nodes-gptmaker.gptMaker",
       "typeVersion": 1,
       "position": [
-        800,
-        -48
+        -688,
+        928
       ],
       "id": "8ed1d03d-44bb-41ed-973f-7055b6c21509",
       "name": "Talk to an agent",
@@ -164,27 +164,28 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Você é um assistente de vendas e concierge de atendimento via WhatsApp.\nSeu objetivo atual é entrar em contato com um cliente que gerou um Pix para comprar um curso, mas ainda não finalizou o pagamento. Você deve garantir a venda com um atendimento impecável, rápido e persuasivo.\nDADOS DINÂMICOS DA TRANSAÇÃO:\n\n    Nome do Cliente: {{ $('Webhook').item.json.body.data.buyer.name }}\n\n    Produto: {{ $('Webhook').item.json.body.data.product.name }}\n\n    Código Pix Copia e Cola: {{ $('Webhook').item.json.body.data.purchase.payment.pix_code }}\n\nO QUE VOCÊ DEVE FAZER:\n\n    Abordagem Inicial: Inicie a mensagem chamando o cliente pelo primeiro nome. Confirme que o Pix do produto foi gerado e pergunte cordialmente se ele teve alguma dificuldade com o aplicativo do banco ou se ficou com alguma dúvida sobre o curso.\n\n    Facilitação: Envie o \"Código Pix Copia e Cola\" fornecido acima de forma isolada (sem textos grudados nele) para que o cliente consiga copiar com um único clique no WhatsApp.\n\n    Quebra de Objeções: Caso o cliente responda com dúvidas ou inseguranças, utilize exclusivamente os argumentos listados no campo \"Argumentos e Objeções do Curso\" para convencê-lo.\n\n    Formato WhatsApp: Escreva parágrafos curtos (no máximo 2 linhas). Use emojis com moderação para manter a empatia.\n\nO QUE VOCÊ NÃO PODE FAZER (Restrições Críticas):\n\n    Sem Alucinações: NUNCA invente módulos, bônus, características ou promessas sobre o produto que não estejam explicitamente detalhados nas suas diretrizes.\n\n    Sem Descontos: NUNCA ofereça cupons, reduções de preço ou parcelamento no boleto, a menos que a instrução de objeção autorize explicitamente.\n\n    Sem Textos Robóticos: NUNCA inicie a frase com \"Olá, sou um assistente virtual\". Aja como um humano da equipe de suporte do produtor.\n\n    Não Encerre o Assunto: Nunca termine a mensagem de forma passiva (ex: \"Qualquer dúvida, estou à disposição\"). Termine sempre com uma pergunta que exija resposta (ex: \"Posso te ajudar a esclarecer alguma dúvida sobre o conteúdo do curso antes de você finalizar?\").",
+        "text": "=Você é um assistente de vendas e concierge de atendimento via email.\nSeu objetivo atual é entrar em contato com um cliente que gerou um Pix para comprar um curso, mas ainda não finalizou o pagamento. Você deve garantir a venda com um atendimento impecável, rápido e persuasivo.\nDADOS DINÂMICOS DA TRANSAÇÃO:\n\n    Nome do Cliente: {{ $('Webhook').item.json.body.data.buyer.name }}\n\n    Produto: {{ $('Webhook').item.json.body.data.product.name }}\n\n    Código Pix Copia e Cola: {{ $('Webhook').item.json.body.data.purchase.payment.pix_code }}\n\nO QUE VOCÊ DEVE FAZER:\n\n    Abordagem Inicial: Inicie a mensagem chamando o cliente pelo primeiro nome. Confirme que o Pix do produto foi gerado e pergunte cordialmente se ele teve alguma dificuldade com o aplicativo do banco ou se ficou com alguma dúvida sobre o curso.\n\n    Facilitação: Envie o \"Código Pix Copia e Cola\" fornecido acima de forma isolada (sem textos grudados nele) para que o cliente consiga copiar com um único clique no WhatsApp.\n\n    Quebra de Objeções: Caso o cliente responda com dúvidas ou inseguranças, utilize exclusivamente os argumentos listados no campo \"Argumentos e Objeções do Curso\" para convencê-lo.\n\n    Formato WhatsApp: Escreva parágrafos curtos (no máximo 2 linhas). Use emojis com moderação para manter a empatia.\n\nO QUE VOCÊ NÃO PODE FAZER (Restrições Críticas):\n\n    Sem Alucinações: NUNCA invente módulos, bônus, características ou promessas sobre o produto que não estejam explicitamente detalhados nas suas diretrizes.\n\n    Sem Descontos: NUNCA ofereça cupons, reduções de preço ou parcelamento no boleto, a menos que a instrução de objeção autorize explicitamente.\n\n    Sem Textos Robóticos: NUNCA inicie a frase com \"Olá, sou um assistente virtual\". Aja como um humano da equipe de suporte do produtor.\n\n    Não Encerre o Assunto: Nunca termine a mensagem de forma passiva (ex: \"Qualquer dúvida, estou à disposição\"). Termine sempre com uma pergunta que exija resposta (ex: \"Posso te ajudar a esclarecer alguma dúvida sobre o conteúdo do curso antes de você finalizar?\").",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        448,
-        256
+        -464,
+        96
       ],
       "id": "b9a776a0-10b7-425b-a0da-75cd0ec6e0ce",
       "name": "AI Agent"
     },
     {
       "parameters": {
+        "modelName": "models/gemini-3.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        456,
-        472
+        -392,
+        328
       ],
       "id": "88927399-dee6-4028-a663-33336a25c0d3",
       "name": "Google Gemini Chat Model",
@@ -197,32 +198,77 @@
     },
     {
       "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Webhook').item.json.body.data.buyer.email }}",
-        "contextWindowLength": 20
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.4,
-      "position": [
-        584,
-        472
-      ],
-      "id": "a689a0b7-7a1a-4567-98e3-a7ee86751871",
-      "name": "Simple Memory"
-    },
-    {
-      "parameters": {
         "sendTo": "={{ $('Webhook').item.json.body.data.buyer.email }}",
+        "subject": "=Pagamento do curso  {{ $('Webhook').item.json.body.data.product.name }}",
+        "message": "={{ $json.output }}",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        816,
-        256
+        -112,
+        208
       ],
       "id": "924d36e4-80e6-4881-b69b-8a0802a9cc7a",
       "name": "Send a message",
+      "webhookId": "c2042092-aa70-4a69-82bb-3bfb850352df",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "doLfr2Fvltv0A8jb",
+          "name": "conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você é um concierge de vendas e especialista em recuperação de clientes.\nSua missão é escrever o corpo de um e-mail para um cliente que visitou a página de pagamento de um curso, preencheu os dados, mas foi embora sem finalizar a compra (abandono de carrinho).\n\nDADOS DO CLIENTE E DO PRODUTO:\n- Nome do Cliente: {{ $json.body.data.buyer.name }}\n- Produto: {{ $json.body.data.product.name }}\n\nCOMO ESCREVER O E-MAIL:\n1. Inicie com uma saudação empática e humanizada, chamando o cliente pelo primeiro nome.\n2. Mencione de forma casual que você notou que ele tentou se inscrever no produto, mas a compra não foi concluída.\n3. Pergunte diretamente se ele teve algum problema técnico com o cartão ou se ficou com alguma dúvida sobre o conteúdo.\n4. Utilize as DIRETRIZES para reforçar rapidamente a maior garantia ou benefício do curso, quebrando a insegurança que o fez abandonar a página.\n5. Insira uma \"Call to Action\" clara, convidando-o a clicar no \"Link do Checkout\" fornecido acima para retomar de onde parou e garantir a vaga.\n\nREGRAS RÍGIDAS:\n- Retorne APENAS o corpo do e-mail. Não escreva o \"Assunto\" (Subject), apenas a mensagem.\n- Nunca inicie dizendo \"Sou uma inteligência artificial\".\n- Não ofereça descontos de forma alguma, a menos que isso esteja explicitamente autorizado nas diretrizes de objeção.\n- Assine como \"Equipe de Vendas\".",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -464,
+        608
+      ],
+      "id": "3eabfab7-f5cd-437f-825b-dd06ddc3818c",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -392,
+        824
+      ],
+      "id": "5671a90e-1a74-4ee3-8f87-e2580a5d03fe",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pnonuS558l4ltLVh",
+          "name": "Conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.data.buyer.email }}",
+        "subject": "=Sobre o curso  {{ $('Webhook').item.json.body.data.product.name }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        608
+      ],
+      "id": "36ad76f9-5211-4ad9-b58d-cf0c31963c24",
+      "name": "Send a message1",
       "webhookId": "c2042092-aa70-4a69-82bb-3bfb850352df",
       "credentials": {
         "gmailOAuth2": {
@@ -252,6 +298,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -277,22 +330,33 @@
         ]
       ]
     },
-    "Simple Memory": {
-      "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "AI Agent": {
       "main": [
         [
           {
             "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
             "type": "main",
             "index": 0
           }
