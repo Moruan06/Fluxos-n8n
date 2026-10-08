@@ -1,0 +1,100 @@
+{
+  "id": "PVli9vTLDC16XFyo",
+  "name": "My workflow",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-10-08T19:35:02.325Z",
+  "updatedAt": "2026-10-08T19:57:05.278Z",
+  "isArchived": false,
+  "versionId": "e9f1475b-8236-4712-adfa-dd19c6ee4a11",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5be92869-50be-417a-9893-17e1548090c6",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://tecnologia.uol.com.br/celulares-telefonia/ultnot/index.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "be78cbf4-4d39-42e8-b7af-2910d0ec3395",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "3d302cef-6db5-47cb-89c1-833d6f2ff93d",
+      "name": "Limit"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "PVli9vTLDC16XFyo",
+      "projectId": "8hi4bD9zCoonCi82",
+      "createdAt": "2026-10-08T19:35:02.328Z",
+      "updatedAt": "2026-10-08T19:35:02.328Z"
+    }
+  ],
+  "activeVersion": null
+}
