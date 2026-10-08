@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-08T19:57:05.278Z",
+  "updatedAt": "2026-10-08T21:00:22.275Z",
   "isArchived": false,
-  "versionId": "e9f1475b-8236-4712-adfa-dd19c6ee4a11",
+  "versionId": "2bcb83cf-e3fd-4d33-bfe5-30a23c0360fd",
   "triggerCount": 0,
   "nodes": [
     {
@@ -47,11 +47,137 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        448,
+        1216,
         0
       ],
       "id": "3d302cef-6db5-47cb-89c1-833d6f2ff93d",
       "name": "Limit"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você será um jornalista bem humorado e simpatico que resume grandes noticias de tecnologia para jovens que querem aprender mais sobre este mundo, mas não aguentam mais ler grandes notícias.\n\nO jornal que você trabalha se chama \"Tech em 2 minutos\" funciona como as \"newsletter\" que envia emails semanais sobre as noticias mais recentes.\n\nVocê não pode inventar nenhuma informação que não esteja na página\n\nFormate o texto para HTML pois será enviado por email para os leitores\n\nEntre em cada um dos links abaixo para ler as noticias\n\n{{ $json.link }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "64ffa490-7a33-4e19-aefa-f5f4fdca02c3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1736,
+        232
+      ],
+      "id": "6f127f05-9145-4676-928a-650d39f386b0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pnonuS558l4ltLVh",
+          "name": "Conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "title"
+            },
+            {
+              "fieldToAggregate": "link"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        0
+      ],
+      "id": "15c7e29d-ccb3-460e-b01e-16df68d27c6f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "sendTo": "nicolaspamu5@gmail.com",
+        "subject": "Tech em 2 minutos!",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2032,
+        0
+      ],
+      "id": "f93a38c9-c6fc-4297-8bfb-7eae5e3ccae2",
+      "name": "Send a message",
+      "webhookId": "7185a223-a45e-47ab-92da-494f7bf089a8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "doLfr2Fvltv0A8jb",
+          "name": "conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "f181e2fd-722d-43b8-aabe-45a59d99e939",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "f6fb9fef-358b-4697-97ba-1110db9e8cd6",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        208
+      ],
+      "id": "50b73724-b7c2-45df-83b6-9c202bb6e049",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pnonuS558l4ltLVh",
+          "name": "Conta Moruan"
+        }
+      }
     }
   ],
   "connections": {
@@ -70,8 +196,85 @@
       "main": [
         [
           {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
             "node": "Limit",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -85,7 +288,9 @@
   },
   "staticData": null,
   "pinData": {},
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "tags": [],
   "shared": [
     {
