@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-08T21:00:22.275Z",
+  "updatedAt": "2026-10-08T21:06:34.118Z",
   "isArchived": false,
-  "versionId": "2bcb83cf-e3fd-4d33-bfe5-30a23c0360fd",
+  "versionId": "1f7e005e-60d8-47c3-b390-efa9b7558e10",
   "triggerCount": 0,
   "nodes": [
     {
@@ -21,7 +21,7 @@
       "typeVersion": 1.4,
       "position": [
         0,
-        0
+        -16
       ],
       "id": "5be92869-50be-417a-9893-17e1548090c6",
       "name": "Schedule Trigger"
@@ -35,7 +35,7 @@
       "typeVersion": 1.2,
       "position": [
         224,
-        0
+        -16
       ],
       "id": "be78cbf4-4d39-42e8-b7af-2910d0ec3395",
       "name": "RSS Read"
@@ -47,8 +47,8 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        1216,
-        0
+        672,
+        -16
       ],
       "id": "3d302cef-6db5-47cb-89c1-833d6f2ff93d",
       "name": "Limit"
@@ -62,8 +62,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1664,
-        0
+        1120,
+        -16
       ],
       "id": "64ffa490-7a33-4e19-aefa-f5f4fdca02c3",
       "name": "AI Agent"
@@ -75,8 +75,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1736,
-        232
+        1192,
+        216
       ],
       "id": "6f127f05-9145-4676-928a-650d39f386b0",
       "name": "Google Gemini Chat Model",
@@ -104,8 +104,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        1440,
-        0
+        896,
+        -16
       ],
       "id": "15c7e29d-ccb3-460e-b01e-16df68d27c6f",
       "name": "Aggregate"
@@ -120,8 +120,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2032,
-        0
+        1472,
+        -16
       ],
       "id": "f93a38c9-c6fc-4297-8bfb-7eae5e3ccae2",
       "name": "Send a message",
@@ -135,49 +135,26 @@
     },
     {
       "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "title"
+            },
+            {
+              "fieldToAggregate": "link"
+            }
+          ]
+        },
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        832,
-        0
-      ],
-      "id": "f181e2fd-722d-43b8-aabe-45a59d99e939",
-      "name": "AI Agent1"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
       "position": [
         448,
-        0
+        -16
       ],
-      "id": "f6fb9fef-358b-4697-97ba-1110db9e8cd6",
-      "name": "AI Agent2"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1.1,
-      "position": [
-        320,
-        208
-      ],
-      "id": "50b73724-b7c2-45df-83b6-9c202bb6e049",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "pnonuS558l4ltLVh",
-          "name": "Conta Moruan"
-        }
-      }
+      "id": "6d7256e4-5039-4ee1-a369-8e717bc74231",
+      "name": "Aggregate1"
     }
   ],
   "connections": {
@@ -196,7 +173,7 @@
       "main": [
         [
           {
-            "node": "AI Agent2",
+            "node": "Aggregate1",
             "type": "main",
             "index": 0
           }
@@ -247,34 +224,12 @@
         ]
       ]
     },
-    "AI Agent1": {
+    "Aggregate1": {
       "main": [
         [
           {
             "node": "Limit",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent2": {
-      "main": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent2",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
