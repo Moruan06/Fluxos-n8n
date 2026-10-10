@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-08T21:06:34.118Z",
+  "updatedAt": "2026-10-10T22:49:54.538Z",
   "isArchived": false,
-  "versionId": "1f7e005e-60d8-47c3-b390-efa9b7558e10",
+  "versionId": "d5cbe59a-4b26-464f-ac14-9495072d9a30",
   "triggerCount": 0,
   "nodes": [
     {
@@ -47,7 +47,7 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        672,
+        1056,
         -16
       ],
       "id": "3d302cef-6db5-47cb-89c1-833d6f2ff93d",
@@ -56,13 +56,13 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Você será um jornalista bem humorado e simpatico que resume grandes noticias de tecnologia para jovens que querem aprender mais sobre este mundo, mas não aguentam mais ler grandes notícias.\n\nO jornal que você trabalha se chama \"Tech em 2 minutos\" funciona como as \"newsletter\" que envia emails semanais sobre as noticias mais recentes.\n\nVocê não pode inventar nenhuma informação que não esteja na página\n\nFormate o texto para HTML pois será enviado por email para os leitores\n\nEntre em cada um dos links abaixo para ler as noticias\n\n{{ $json.link }}",
+        "text": "=Você será um jornalista bem humorado e simpatico que resume grandes noticias de tecnologia para jovens que querem aprender mais sobre este mundo, mas não aguentam mais ler grandes notícias.\n\nO jornal que você trabalha se chama \"Tech em 2 minutos\" funciona como as \"newsletter\" que envia emails semanais sobre as noticias mais recentes.\n\nVocê não pode inventar nenhuma informação que não esteja na página\n\nFormate o texto para HTML pois será enviado por email para os leitores\n\nEntre em cada um dos links abaixo para ler as noticias",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1120,
+        1280,
         -16
       ],
       "id": "64ffa490-7a33-4e19-aefa-f5f4fdca02c3",
@@ -75,7 +75,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1192,
+        1352,
         216
       ],
       "id": "6f127f05-9145-4676-928a-650d39f386b0",
@@ -89,38 +89,15 @@
     },
     {
       "parameters": {
-        "fieldsToAggregate": {
-          "fieldToAggregate": [
-            {
-              "fieldToAggregate": "title"
-            },
-            {
-              "fieldToAggregate": "link"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        896,
-        -16
-      ],
-      "id": "15c7e29d-ccb3-460e-b01e-16df68d27c6f",
-      "name": "Aggregate"
-    },
-    {
-      "parameters": {
         "sendTo": "nicolaspamu5@gmail.com",
         "subject": "Tech em 2 minutos!",
-        "message": "={{ $json.output }}",
+        "message": "=",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1472,
+        1632,
         -16
       ],
       "id": "f93a38c9-c6fc-4297-8bfb-7eae5e3ccae2",
@@ -135,26 +112,108 @@
     },
     {
       "parameters": {
-        "fieldsToAggregate": {
-          "fieldToAggregate": [
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+          "mode": "list",
+          "cachedResultName": "BD_RSS (n8n)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID-Noticia": "={{ $('RSS Read').item.json.link }} - {{ $('RSS Read').item.json.isoDate }}"
+          },
+          "matchingColumns": [
+            "ID-Noticia"
+          ],
+          "schema": [
             {
-              "fieldToAggregate": "title"
-            },
-            {
-              "fieldToAggregate": "link"
+              "id": "ID-Noticia",
+              "displayName": "ID-Noticia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
-          ]
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        448,
+        1856,
         -16
       ],
-      "id": "6d7256e4-5039-4ee1-a369-8e717bc74231",
-      "name": "Aggregate1"
+      "id": "4fea4b41-f3b5-4447-bc39-c240211d6599",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jdOUpayzpEgqvP1X",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+          "mode": "list",
+          "cachedResultName": "BD_RSS (n8n)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        -112
+      ],
+      "id": "966bad14-a887-4093-b992-789892d8d272",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jdOUpayzpEgqvP1X",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        -16
+      ],
+      "id": "859b7d0d-e351-4b0b-bc52-aefe2952d130",
+      "name": "Merge"
     }
   ],
   "connections": {
@@ -173,9 +232,14 @@
       "main": [
         [
           {
-            "node": "Aggregate1",
+            "node": "Get row(s) in sheet",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -184,7 +248,7 @@
       "main": [
         [
           {
-            "node": "Aggregate",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -202,17 +266,6 @@
         ]
       ]
     },
-    "Aggregate": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "AI Agent": {
       "main": [
         [
@@ -224,7 +277,29 @@
         ]
       ]
     },
-    "Aggregate1": {
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
       "main": [
         [
           {
