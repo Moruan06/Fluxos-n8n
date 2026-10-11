@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-11T00:18:38.143Z",
+  "updatedAt": "2026-10-11T20:46:25.862Z",
   "isArchived": false,
-  "versionId": "ac76c7b2-c4fc-42ed-9219-84b77258bcce",
+  "versionId": "bbf40199-8c20-4082-8563-74bf0b324a5f",
   "triggerCount": 0,
   "nodes": [
     {
@@ -70,7 +70,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-3.6-flash",
+        "modelName": "models/gemini-3.8-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -261,6 +261,25 @@
       ],
       "id": "9a4d0257-a5eb-4b64-bf81-248bb162c5db",
       "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1584,
+        192
+      ],
+      "id": "29344195-feea-41bd-9254-7fe05c795667",
+      "name": "HTML"
     }
   ],
   "connections": {
