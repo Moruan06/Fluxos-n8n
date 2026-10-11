@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-10T22:49:54.538Z",
+  "updatedAt": "2026-10-10T23:54:39.693Z",
   "isArchived": false,
-  "versionId": "d5cbe59a-4b26-464f-ac14-9495072d9a30",
+  "versionId": "0a75bf26-a50f-44c7-a034-7fe1cf46fb84",
   "triggerCount": 0,
   "nodes": [
     {
@@ -89,7 +89,7 @@
     },
     {
       "parameters": {
-        "sendTo": "nicolaspamu5@gmail.com",
+        "sendTo": "moruan.mattar@gmail.com",
         "subject": "Tech em 2 minutos!",
         "message": "=",
         "options": {}
@@ -130,7 +130,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "ID-Noticia": "={{ $('RSS Read').item.json.link }} - {{ $('RSS Read').item.json.isoDate }}"
+            "ID-Noticia": "={{ $('Limit').item.json.link }}"
           },
           "matchingColumns": [
             "ID-Noticia"
@@ -186,13 +186,26 @@
         "filtersUI": {
           "values": []
         },
-        "options": {}
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "detectAutomatically"
+            }
+          },
+          "outputFormatting": {
+            "values": {
+              "general": "UNFORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          },
+          "returnFirstMatch": false
+        }
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        416,
-        -112
+        464,
+        96
       ],
       "id": "966bad14-a887-4093-b992-789892d8d272",
       "name": "Get row(s) in sheet",
@@ -205,11 +218,24 @@
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "link",
+              "field2": "ID-Noticia"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        672,
+        704,
         -16
       ],
       "id": "859b7d0d-e351-4b0b-bc52-aefe2952d130",
@@ -232,14 +258,14 @@
       "main": [
         [
           {
-            "node": "Get row(s) in sheet",
+            "node": "Merge",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Merge",
+            "node": "Get row(s) in sheet",
             "type": "main",
-            "index": 1
+            "index": 0
           }
         ]
       ]
@@ -294,7 +320,7 @@
           {
             "node": "Merge",
             "type": "main",
-            "index": 0
+            "index": 1
           }
         ]
       ]
