@@ -4,9 +4,9 @@
   "active": false,
   "activeVersionId": null,
   "createdAt": "2026-10-08T19:35:02.325Z",
-  "updatedAt": "2026-10-10T23:54:39.693Z",
+  "updatedAt": "2026-10-11T00:18:38.143Z",
   "isArchived": false,
-  "versionId": "0a75bf26-a50f-44c7-a034-7fe1cf46fb84",
+  "versionId": "ac76c7b2-c4fc-42ed-9219-84b77258bcce",
   "triggerCount": 0,
   "nodes": [
     {
@@ -47,7 +47,7 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        1056,
+        896,
         -16
       ],
       "id": "3d302cef-6db5-47cb-89c1-833d6f2ff93d",
@@ -56,13 +56,13 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Você será um jornalista bem humorado e simpatico que resume grandes noticias de tecnologia para jovens que querem aprender mais sobre este mundo, mas não aguentam mais ler grandes notícias.\n\nO jornal que você trabalha se chama \"Tech em 2 minutos\" funciona como as \"newsletter\" que envia emails semanais sobre as noticias mais recentes.\n\nVocê não pode inventar nenhuma informação que não esteja na página\n\nFormate o texto para HTML pois será enviado por email para os leitores\n\nEntre em cada um dos links abaixo para ler as noticias",
+        "text": "=Você será um jornalista bem humorado e simpatico que resume grandes noticias de tecnologia para jovens que querem aprender mais sobre este mundo, mas não aguentam mais ler grandes notícias.\n\nVocê não pode inventar nenhuma informação que não esteja na página\n\nFormate o texto para HTML pois será enviado por email para os leitores.\n\nMande somente o resumo da noticia e nada mais, não quero algo como \"aqui está o resumo\", quero SOMENTE o resumo.\n\nFormate o texto como:\n\nTITULO CHAMATIVO DA NOTICIA\nResumo da noticia.\n\nuse emojis e linguagem jovem, dê destaque aos pontos mais importantes do resumo.\n\nEntre no link abaixo para ler a noticia\n\n{{ $json.link }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1280,
+        1120,
         -16
       ],
       "id": "64ffa490-7a33-4e19-aefa-f5f4fdca02c3",
@@ -70,12 +70,13 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-3.6-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        1352,
+        1192,
         216
       ],
       "id": "6f127f05-9145-4676-928a-650d39f386b0",
@@ -97,7 +98,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1632,
+        1696,
         -16
       ],
       "id": "f93a38c9-c6fc-4297-8bfb-7eae5e3ccae2",
@@ -155,7 +156,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1856,
+        1920,
         -16
       ],
       "id": "4fea4b41-f3b5-4447-bc39-c240211d6599",
@@ -204,8 +205,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        464,
-        96
+        448,
+        64
       ],
       "id": "966bad14-a887-4093-b992-789892d8d272",
       "name": "Get row(s) in sheet",
@@ -235,11 +236,31 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        704,
+        672,
         -16
       ],
       "id": "859b7d0d-e351-4b0b-bc52-aefe2952d130",
       "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -16
+      ],
+      "id": "9a4d0257-a5eb-4b64-bf81-248bb162c5db",
+      "name": "Aggregate"
     }
   ],
   "connections": {
@@ -296,7 +317,7 @@
       "main": [
         [
           {
-            "node": "Send a message",
+            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
@@ -330,6 +351,17 @@
         [
           {
             "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
             "type": "main",
             "index": 0
           }
