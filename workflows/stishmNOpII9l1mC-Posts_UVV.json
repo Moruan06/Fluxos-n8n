@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
   "createdAt": "2026-10-11T21:09:00.079Z",
-  "updatedAt": "2026-10-13T08:57:56.451Z",
+  "updatedAt": "2026-10-13T09:13:27.456Z",
   "isArchived": false,
-  "versionId": "d0caaef8-2828-4bda-8776-e0d9ab8c8950",
+  "versionId": "8c2f430b-8981-4ae3-bb28-7f8f5f90a7cf",
   "triggerCount": 1,
   "nodes": [
     {
@@ -184,8 +184,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        1056,
-        -400
+        1120,
+        -432
       ],
       "id": "5669a955-0154-454b-8634-267c351fa649",
       "name": "Pegar Conteúdo Materia"
@@ -599,7 +599,7 @@
       "typeVersion": 1.4,
       "position": [
         0,
-        -432
+        -336
       ],
       "id": "cfdc87b4-9eb3-4723-999a-71d2ad873031",
       "name": "Schedule Trigger"
