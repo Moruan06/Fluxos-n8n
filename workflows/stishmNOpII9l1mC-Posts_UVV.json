@@ -2,11 +2,11 @@
   "id": "stishmNOpII9l1mC",
   "name": "Posts_UVV",
   "active": true,
-  "activeVersionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
+  "activeVersionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
   "createdAt": "2026-10-11T21:09:00.079Z",
-  "updatedAt": "2026-10-13T09:13:27.456Z",
+  "updatedAt": "2026-10-13T21:17:27.303Z",
   "isArchived": false,
-  "versionId": "8c2f430b-8981-4ae3-bb28-7f8f5f90a7cf",
+  "versionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
   "triggerCount": 1,
   "nodes": [
     {
@@ -325,7 +325,8 @@
                 "property": "my_file"
               }
             ]
-          }
+          },
+          "ccList": "nicolaspamu10@gmail.com"
         }
       },
       "type": "n8n-nodes-base.gmail",
@@ -384,7 +385,9 @@
         "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
         "emailType": "text",
         "message": "={{ $json.conteudos }}",
-        "options": {}
+        "options": {
+          "ccList": "nicolaspamu10@gmail.com"
+        }
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
@@ -495,6 +498,7 @@
           ]
         },
         "joinMode": "keepNonMatches",
+        "outputDataFrom": "input1",
         "options": {}
       },
       "type": "n8n-nodes-base.merge",
@@ -877,7 +881,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
+    "versionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
     "workflowId": "stishmNOpII9l1mC",
     "nodes": [
       {
@@ -1196,7 +1200,8 @@
                   "property": "my_file"
                 }
               ]
-            }
+            },
+            "ccList": "nicolaspamu10@gmail.com"
           }
         },
         "type": "n8n-nodes-base.gmail",
@@ -1255,7 +1260,9 @@
           "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
           "emailType": "text",
           "message": "={{ $json.conteudos }}",
-          "options": {}
+          "options": {
+            "ccList": "nicolaspamu10@gmail.com"
+          }
         },
         "type": "n8n-nodes-base.gmail",
         "typeVersion": 2.2,
@@ -1366,6 +1373,7 @@
             ]
           },
           "joinMode": "keepNonMatches",
+          "outputDataFrom": "input1",
           "options": {}
         },
         "type": "n8n-nodes-base.merge",
@@ -1470,7 +1478,7 @@
         "typeVersion": 1.4,
         "position": [
           0,
-          -432
+          -336
         ],
         "id": "cfdc87b4-9eb3-4723-999a-71d2ad873031",
         "name": "Schedule Trigger"
@@ -1695,10 +1703,10 @@
     },
     "nodeGroups": [],
     "authors": "Moruan Matar",
-    "name": "Version 495b20b5",
+    "name": "Version 2d95da14",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-10-13T01:34:09.690Z",
-    "updatedAt": "2026-10-13T01:34:13.000Z"
+    "createdAt": "2026-10-13T21:17:27.304Z",
+    "updatedAt": "2026-10-13T21:17:33.000Z"
   }
 }
