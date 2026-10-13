@@ -1,0 +1,1683 @@
+{
+  "id": "stishmNOpII9l1mC",
+  "name": "Posts_UVV",
+  "active": true,
+  "activeVersionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
+  "createdAt": "2026-10-11T21:09:00.079Z",
+  "updatedAt": "2026-10-13T01:35:06.864Z",
+  "isArchived": false,
+  "versionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aluno.uvv.br/Login",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Refer",
+              "value": "https://aluno.uvv.br/Login"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Matricula",
+              "value": "202418320"
+            },
+            {
+              "name": "Password",
+              "value": "={{ $env.N8N_ENV_VAR_SENHA_UVV }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        -432
+      ],
+      "id": "eb241fd9-99b6-47e4-91d9-28fe636f196e",
+      "name": "Fazer Login"
+    },
+    {
+      "parameters": {
+        "url": "https://aluno.uvv.br/Aluno/Dashboard",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') }}"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/117.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        -432
+      ],
+      "id": "a8bc2336-e95c-4f3d-8c93-49074cd26dfb",
+      "name": "Pegar Matérias"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "materias",
+              "cssSelector": ".card-turma a[href*=\"/Aluno/Blog/\"]",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        -432
+      ],
+      "id": "62639d84-b1f2-4cb0-b938-b0919f5e6c92",
+      "name": "Pegar Link dos Cards"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "materias",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        896,
+        -432
+      ],
+      "id": "0ea6cbde-6b99-4056-81fc-b9705fdd6495",
+      "name": "Separar links"
+    },
+    {
+      "parameters": {
+        "url": "=https://aluno.uvv.br/Aluno/BlogCarregarMais/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "parametros",
+              "value": "={{ $json.materias.split('parametros=')[1] }}"
+            },
+            {
+              "name": "pagesize",
+              "value": "50"
+            },
+            {
+              "name": "pagenumber",
+              "value": "0"
+            },
+            {
+              "name": "filter"
+            },
+            {
+              "name": "ano",
+              "value": "2026"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Fazer Login').first().json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') }}"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "X-Requested-With",
+              "value": "XMLHttpRequest"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1120,
+        -432
+      ],
+      "id": "5669a955-0154-454b-8634-267c351fa649",
+      "name": "Pegar Conteúdo Materia"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "posts",
+              "cssSelector": ".panel-body  a[href*=\"/Aluno/Post/\"]",
+              "returnValue": "attribute",
+              "attribute": "href"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        -432
+      ],
+      "id": "55905e21-bd28-4348-a93a-82f61cbe731f",
+      "name": "Link Posts"
+    },
+    {
+      "parameters": {
+        "url": "=https://aluno.uvv.br{{ $json.posts }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Fazer Login').first().json.headers['set-cookie'][0] }}"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1792,
+        -336
+      ],
+      "id": "c87af0a2-a17c-490d-9d89-e253b01cbf61",
+      "name": "Ler Post"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "titulos",
+              "cssSelector": "h1.page-header"
+            },
+            {
+              "key": "conteudos",
+              "cssSelector": ".panel-body"
+            },
+            {
+              "key": "link_arquivo",
+              "cssSelector": "a.btn-success",
+              "returnValue": "attribute",
+              "attribute": "href"
+            },
+            {
+              "key": "materias",
+              "cssSelector": "ol.breadcrumb li:nth-child(2) a"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        2016,
+        -336
+      ],
+      "id": "504fd030-933f-4ecd-80ee-5c13d9ec7a30",
+      "name": "Pegar Conteudo do Post"
+    },
+    {
+      "parameters": {
+        "url": "=https://aluno.uvv.br{{ $('Pegar Conteudo do Post').item.json.link_arquivo }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Fazer Login').first().json.headers['set-cookie'][0] }}"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "my_file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2688,
+        -432
+      ],
+      "id": "16b6a40f-fe51-497d-a34d-79be3e0057b1",
+      "name": "Baixar arquivo",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "moruan.mattar@gmail.com",
+        "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
+        "emailType": "text",
+        "message": "={{ $('Baixar arquivo').item.json.conteudos }}\n\n{{ $json.content.parts[0].text }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "my_file"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3360,
+        -432
+      ],
+      "id": "b7b1752d-05fe-4e73-995f-aef5ff6f7906",
+      "name": "Send a message",
+      "webhookId": "57756750-3e4f-482c-b113-7ae66200de86",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "doLfr2Fvltv0A8jb",
+          "name": "conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4f183b06-e9ce-4500-8311-a849fc3c5d8d",
+              "leftValue": "={{ $('Pegar Conteudo do Post').item.json.link_arquivo }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2464,
+        -336
+      ],
+      "id": "3dd4c8e8-fe7a-4c7e-807c-443e294cb0ef",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "moruan.mattar@gmail.com",
+        "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
+        "emailType": "text",
+        "message": "={{ $json.conteudos }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3360,
+        -224
+      ],
+      "id": "2c2d6881-dfa3-453b-b6eb-314b259b9cce",
+      "name": "Send a message1",
+      "webhookId": "173f638a-217d-4c4b-9a27-d1f76fb0928b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "doLfr2Fvltv0A8jb",
+          "name": "conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "28d7425b-5077-4f07-9241-2d0e412f1ad2",
+              "name": "conteudos",
+              "value": "={{ $json.conteudos.replace(/\\[data:image.*?\\]/g, '[Imagem anexada no portal]') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2240,
+        -336
+      ],
+      "id": "1d48b322-97fd-4e42-8ae3-e125ae2fcbd3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+          "mode": "list",
+          "cachedResultName": "BD_RSS (n8n)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID-Noticia": "={{ $('Link Posts').item.json.posts }}"
+          },
+          "matchingColumns": [
+            "ID-Noticia"
+          ],
+          "schema": [
+            {
+              "id": "ID-Noticia",
+              "displayName": "ID-Noticia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3584,
+        -336
+      ],
+      "id": "6538f3ab-386f-4bc2-a3c2-8998e9aa39d2",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jdOUpayzpEgqvP1X",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "posts",
+              "field2": "ID-Noticia"
+            }
+          ]
+        },
+        "joinMode": "keepNonMatches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1568,
+        -336
+      ],
+      "id": "e9388c41-bf1c-49aa-9cb5-0bff179c359a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+          "mode": "list",
+          "cachedResultName": "BD_RSS (n8n)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1344,
+        -240
+      ],
+      "id": "97f0b872-a92b-4b42-9df4-32f3c9766c79",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jdOUpayzpEgqvP1X",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.8-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.8-flash"
+        },
+        "text": "Atue como um assistente acadêmico direto e eficiente. A sua tarefa é analisar o conteúdo extraído de um material de faculdade e gerar um resumo prático para o aluno.\n\nSiga estas regras rigorosamente:\n\n    Formato Texto Puro: A sua resposta será enviada num e-mail de texto simples. NÃO use nenhuma formatação Markdown (não use  para negrito, nem # para títulos). Use apenas letras MAIÚSCULAS para destacar tópicos e hifens (-) para listas.\n\n    Foco 100% no Conteúdo: Resuma apenas a matéria, os conceitos e os avisos. Não faça comentários técnicos sobre o documento (nunca diga \"Este arquivo PDF\", \"Os slides mostram\", \"O documento contém\"). Vá direto ao assunto da aula.\n\n    Prevenção de Alucinação: Se o texto fornecido abaixo estiver vazio, contiver apenas caracteres desconexos ou não possuir conteúdo acadêmico legível, não tente inventar, adivinhar ou justificar o motivo. Responda APENAS a seguinte frase: \"Não foi possível analisar o conteúdo do arquivo anexado.\"",
+        "inputType": "binary",
+        "binaryPropertyName": "=my_file",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        2912,
+        -512
+      ],
+      "id": "94bcdc0d-aa3f-4ef6-8c0f-169c7324e9a3",
+      "name": "Analyze document",
+      "retryOnFail": true,
+      "executeOnce": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pnonuS558l4ltLVh",
+          "name": "Conta Moruan"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3136,
+        -432
+      ],
+      "id": "ad1c2ac4-99af-4350-97f0-85809f8704bd",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        -432
+      ],
+      "id": "cfdc87b4-9eb3-4723-999a-71d2ad873031",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {
+    "Fazer Login": {
+      "main": [
+        [
+          {
+            "node": "Pegar Matérias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar Matérias": {
+      "main": [
+        [
+          {
+            "node": "Pegar Link dos Cards",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar Link dos Cards": {
+      "main": [
+        [
+          {
+            "node": "Separar links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar links": {
+      "main": [
+        [
+          {
+            "node": "Pegar Conteúdo Materia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar Conteúdo Materia": {
+      "main": [
+        [
+          {
+            "node": "Link Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link Posts": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler Post": {
+      "main": [
+        [
+          {
+            "node": "Pegar Conteudo do Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar Conteudo do Post": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar arquivo": {
+      "main": [
+        [
+          {
+            "node": "Analyze document",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Baixar arquivo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Ler Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Analyze document": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fazer Login",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "ubgVbaWTPNzOD3Zf",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "stishmNOpII9l1mC",
+      "projectId": "8hi4bD9zCoonCi82",
+      "createdAt": "2026-10-11T21:09:00.082Z",
+      "updatedAt": "2026-10-11T21:09:00.082Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "495b20b5-eb17-48da-921f-bdad65da8cc7",
+    "workflowId": "stishmNOpII9l1mC",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://aluno.uvv.br/Login",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "Refer",
+                "value": "https://aluno.uvv.br/Login"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "form-urlencoded",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "Matricula",
+                "value": "202418320"
+              },
+              {
+                "name": "Password",
+                "value": "={{ $env.N8N_ENV_VAR_SENHA_UVV }}"
+              }
+            ]
+          },
+          "options": {
+            "redirect": {
+              "redirect": {
+                "followRedirects": false
+              }
+            },
+            "response": {
+              "response": {
+                "fullResponse": true,
+                "neverError": true
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          224,
+          -432
+        ],
+        "id": "eb241fd9-99b6-47e4-91d9-28fe636f196e",
+        "name": "Fazer Login"
+      },
+      {
+        "parameters": {
+          "url": "https://aluno.uvv.br/Aluno/Dashboard",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Cookie",
+                "value": "={{ $json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') }}"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/117.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          448,
+          -432
+        ],
+        "id": "a8bc2336-e95c-4f3d-8c93-49074cd26dfb",
+        "name": "Pegar Matérias"
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "key": "materias",
+                "cssSelector": ".card-turma a[href*=\"/Aluno/Blog/\"]",
+                "returnValue": "attribute",
+                "attribute": "href",
+                "returnArray": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          672,
+          -432
+        ],
+        "id": "62639d84-b1f2-4cb0-b938-b0919f5e6c92",
+        "name": "Pegar Link dos Cards"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "materias",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          896,
+          -432
+        ],
+        "id": "0ea6cbde-6b99-4056-81fc-b9705fdd6495",
+        "name": "Separar links"
+      },
+      {
+        "parameters": {
+          "url": "=https://aluno.uvv.br/Aluno/BlogCarregarMais/",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "parametros",
+                "value": "={{ $json.materias.split('parametros=')[1] }}"
+              },
+              {
+                "name": "pagesize",
+                "value": "50"
+              },
+              {
+                "name": "pagenumber",
+                "value": "0"
+              },
+              {
+                "name": "filter"
+              },
+              {
+                "name": "ano",
+                "value": "2026"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Cookie",
+                "value": "={{ $('Fazer Login').first().json.headers['set-cookie'].map(c => c.split(';')[0]).join('; ') }}"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+              },
+              {
+                "name": "X-Requested-With",
+                "value": "XMLHttpRequest"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1120,
+          -432
+        ],
+        "id": "5669a955-0154-454b-8634-267c351fa649",
+        "name": "Pegar Conteúdo Materia"
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "key": "posts",
+                "cssSelector": ".panel-body  a[href*=\"/Aluno/Post/\"]",
+                "returnValue": "attribute",
+                "attribute": "href"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          1344,
+          -432
+        ],
+        "id": "55905e21-bd28-4348-a93a-82f61cbe731f",
+        "name": "Link Posts"
+      },
+      {
+        "parameters": {
+          "url": "=https://aluno.uvv.br{{ $json.posts }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Cookie",
+                "value": "={{ $('Fazer Login').first().json.headers['set-cookie'][0] }}"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          1792,
+          -336
+        ],
+        "id": "c87af0a2-a17c-490d-9d89-e253b01cbf61",
+        "name": "Ler Post"
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {
+                "key": "titulos",
+                "cssSelector": "h1.page-header"
+              },
+              {
+                "key": "conteudos",
+                "cssSelector": ".panel-body"
+              },
+              {
+                "key": "link_arquivo",
+                "cssSelector": "a.btn-success",
+                "returnValue": "attribute",
+                "attribute": "href"
+              },
+              {
+                "key": "materias",
+                "cssSelector": "ol.breadcrumb li:nth-child(2) a"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          2016,
+          -336
+        ],
+        "id": "504fd030-933f-4ecd-80ee-5c13d9ec7a30",
+        "name": "Pegar Conteudo do Post"
+      },
+      {
+        "parameters": {
+          "url": "=https://aluno.uvv.br{{ $('Pegar Conteudo do Post').item.json.link_arquivo }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Cookie",
+                "value": "={{ $('Fazer Login').first().json.headers['set-cookie'][0] }}"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "file",
+                "outputPropertyName": "my_file"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          2688,
+          -432
+        ],
+        "id": "16b6a40f-fe51-497d-a34d-79be3e0057b1",
+        "name": "Baixar arquivo",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "sendTo": "moruan.mattar@gmail.com",
+          "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
+          "emailType": "text",
+          "message": "={{ $('Baixar arquivo').item.json.conteudos }}\n\n{{ $json.content.parts[0].text }}",
+          "options": {
+            "attachmentsUi": {
+              "attachmentsBinary": [
+                {
+                  "property": "my_file"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          3360,
+          -432
+        ],
+        "id": "b7b1752d-05fe-4e73-995f-aef5ff6f7906",
+        "name": "Send a message",
+        "webhookId": "57756750-3e4f-482c-b113-7ae66200de86",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "doLfr2Fvltv0A8jb",
+            "name": "conta Moruan"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4f183b06-e9ce-4500-8311-a849fc3c5d8d",
+                "leftValue": "={{ $('Pegar Conteudo do Post').item.json.link_arquivo }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2464,
+          -336
+        ],
+        "id": "3dd4c8e8-fe7a-4c7e-807c-443e294cb0ef",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "sendTo": "moruan.mattar@gmail.com",
+          "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
+          "emailType": "text",
+          "message": "={{ $json.conteudos }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          3360,
+          -224
+        ],
+        "id": "2c2d6881-dfa3-453b-b6eb-314b259b9cce",
+        "name": "Send a message1",
+        "webhookId": "173f638a-217d-4c4b-9a27-d1f76fb0928b",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "doLfr2Fvltv0A8jb",
+            "name": "conta Moruan"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "28d7425b-5077-4f07-9241-2d0e412f1ad2",
+                "name": "conteudos",
+                "value": "={{ $json.conteudos.replace(/\\[data:image.*?\\]/g, '[Imagem anexada no portal]') }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.5,
+        "position": [
+          2240,
+          -336
+        ],
+        "id": "1d48b322-97fd-4e42-8ae3-e125ae2fcbd3",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "operation": "appendOrUpdate",
+          "documentId": {
+            "__rl": true,
+            "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+            "mode": "list",
+            "cachedResultName": "BD_RSS (n8n)",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ID-Noticia": "={{ $('Link Posts').item.json.posts }}"
+            },
+            "matchingColumns": [
+              "ID-Noticia"
+            ],
+            "schema": [
+              {
+                "id": "ID-Noticia",
+                "displayName": "ID-Noticia",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          3584,
+          -336
+        ],
+        "id": "6538f3ab-386f-4bc2-a3c2-8998e9aa39d2",
+        "name": "Append or update row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "jdOUpayzpEgqvP1X",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "posts",
+                "field2": "ID-Noticia"
+              }
+            ]
+          },
+          "joinMode": "keepNonMatches",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1568,
+          -336
+        ],
+        "id": "e9388c41-bf1c-49aa-9cb5-0bff179c359a",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
+            "mode": "list",
+            "cachedResultName": "BD_RSS (n8n)",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1344,
+          -240
+        ],
+        "id": "97f0b872-a92b-4b42-9df4-32f3c9766c79",
+        "name": "Get row(s) in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "jdOUpayzpEgqvP1X",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "document",
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-3.8-flash",
+            "mode": "list",
+            "cachedResultName": "models/gemini-3.8-flash"
+          },
+          "text": "Atue como um assistente acadêmico direto e eficiente. A sua tarefa é analisar o conteúdo extraído de um material de faculdade e gerar um resumo prático para o aluno.\n\nSiga estas regras rigorosamente:\n\n    Formato Texto Puro: A sua resposta será enviada num e-mail de texto simples. NÃO use nenhuma formatação Markdown (não use  para negrito, nem # para títulos). Use apenas letras MAIÚSCULAS para destacar tópicos e hifens (-) para listas.\n\n    Foco 100% no Conteúdo: Resuma apenas a matéria, os conceitos e os avisos. Não faça comentários técnicos sobre o documento (nunca diga \"Este arquivo PDF\", \"Os slides mostram\", \"O documento contém\"). Vá direto ao assunto da aula.\n\n    Prevenção de Alucinação: Se o texto fornecido abaixo estiver vazio, contiver apenas caracteres desconexos ou não possuir conteúdo acadêmico legível, não tente inventar, adivinhar ou justificar o motivo. Responda APENAS a seguinte frase: \"Não foi possível analisar o conteúdo do arquivo anexado.\"",
+          "inputType": "binary",
+          "binaryPropertyName": "=my_file",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1.2,
+        "position": [
+          2912,
+          -512
+        ],
+        "id": "94bcdc0d-aa3f-4ef6-8c0f-169c7324e9a3",
+        "name": "Analyze document",
+        "retryOnFail": true,
+        "executeOnce": false,
+        "credentials": {
+          "googlePalmApi": {
+            "id": "pnonuS558l4ltLVh",
+            "name": "Conta Moruan"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          3136,
+          -432
+        ],
+        "id": "ad1c2ac4-99af-4350-97f0-85809f8704bd",
+        "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          0,
+          -432
+        ],
+        "id": "cfdc87b4-9eb3-4723-999a-71d2ad873031",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "Fazer Login": {
+        "main": [
+          [
+            {
+              "node": "Pegar Matérias",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pegar Matérias": {
+        "main": [
+          [
+            {
+              "node": "Pegar Link dos Cards",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pegar Link dos Cards": {
+        "main": [
+          [
+            {
+              "node": "Separar links",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Separar links": {
+        "main": [
+          [
+            {
+              "node": "Pegar Conteúdo Materia",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pegar Conteúdo Materia": {
+        "main": [
+          [
+            {
+              "node": "Link Posts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Link Posts": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Ler Post": {
+        "main": [
+          [
+            {
+              "node": "Pegar Conteudo do Post",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pegar Conteudo do Post": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baixar arquivo": {
+        "main": [
+          [
+            {
+              "node": "Analyze document",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Baixar arquivo",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "Append or update row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message1": {
+        "main": [
+          [
+            {
+              "node": "Append or update row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Ler Post",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Analyze document": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Fazer Login",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Get row(s) in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Moruan Matar",
+    "name": "Version 495b20b5",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-10-13T01:34:09.690Z",
+    "updatedAt": "2026-10-13T01:34:13.000Z"
+  }
+}
