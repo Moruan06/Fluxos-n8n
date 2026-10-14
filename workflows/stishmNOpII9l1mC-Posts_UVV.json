@@ -2,11 +2,11 @@
   "id": "stishmNOpII9l1mC",
   "name": "Posts_UVV",
   "active": true,
-  "activeVersionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
+  "activeVersionId": "70d6e332-4e12-466e-ae2f-955a2c2e59e0",
   "createdAt": "2026-10-11T21:09:00.079Z",
-  "updatedAt": "2026-10-13T21:17:27.303Z",
+  "updatedAt": "2026-10-14T20:21:11.516Z",
   "isArchived": false,
-  "versionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
+  "versionId": "70d6e332-4e12-466e-ae2f-955a2c2e59e0",
   "triggerCount": 1,
   "nodes": [
     {
@@ -314,7 +314,7 @@
     },
     {
       "parameters": {
-        "sendTo": "moruan.mattar@gmail.com",
+        "sendTo": "moruan.mattar@gmail.com, nicolaspamu10@gmail.com",
         "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
         "emailType": "text",
         "message": "={{ $('Baixar arquivo').item.json.conteudos }}\n\n{{ $json.content.parts[0].text }}",
@@ -325,8 +325,7 @@
                 "property": "my_file"
               }
             ]
-          },
-          "ccList": "nicolaspamu10@gmail.com"
+          }
         }
       },
       "type": "n8n-nodes-base.gmail",
@@ -381,13 +380,11 @@
     },
     {
       "parameters": {
-        "sendTo": "moruan.mattar@gmail.com",
+        "sendTo": "moruan.mattar@gmail.com, nicolaspamu10@gmail.com",
         "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
         "emailType": "text",
         "message": "={{ $json.conteudos }}",
-        "options": {
-          "ccList": "nicolaspamu10@gmail.com"
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
@@ -881,7 +878,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "2d95da14-6ad3-4833-bfa1-da72b8d274ea",
+    "versionId": "70d6e332-4e12-466e-ae2f-955a2c2e59e0",
     "workflowId": "stishmNOpII9l1mC",
     "nodes": [
       {
@@ -1189,7 +1186,7 @@
       },
       {
         "parameters": {
-          "sendTo": "moruan.mattar@gmail.com",
+          "sendTo": "moruan.mattar@gmail.com, nicolaspamu10@gmail.com",
           "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
           "emailType": "text",
           "message": "={{ $('Baixar arquivo').item.json.conteudos }}\n\n{{ $json.content.parts[0].text }}",
@@ -1200,8 +1197,7 @@
                   "property": "my_file"
                 }
               ]
-            },
-            "ccList": "nicolaspamu10@gmail.com"
+            }
           }
         },
         "type": "n8n-nodes-base.gmail",
@@ -1256,13 +1252,11 @@
       },
       {
         "parameters": {
-          "sendTo": "moruan.mattar@gmail.com",
+          "sendTo": "moruan.mattar@gmail.com, nicolaspamu10@gmail.com",
           "subject": "={{ $('Pegar Conteudo do Post').item.json.materias }} - {{ $('Pegar Conteudo do Post').item.json.titulos }} - {{ DateTime.fromISO($now).format('dd/MM/yyyy') }}",
           "emailType": "text",
           "message": "={{ $json.conteudos }}",
-          "options": {
-            "ccList": "nicolaspamu10@gmail.com"
-          }
+          "options": {}
         },
         "type": "n8n-nodes-base.gmail",
         "typeVersion": 2.2,
@@ -1703,10 +1697,10 @@
     },
     "nodeGroups": [],
     "authors": "Moruan Matar",
-    "name": "Version 2d95da14",
+    "name": "Version 70d6e332",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-10-13T21:17:27.304Z",
-    "updatedAt": "2026-10-13T21:17:33.000Z"
+    "createdAt": "2026-10-14T20:21:11.517Z",
+    "updatedAt": "2026-10-14T20:21:16.000Z"
   }
 }
