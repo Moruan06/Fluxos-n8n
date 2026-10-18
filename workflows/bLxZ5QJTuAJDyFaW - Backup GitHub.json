@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "942054fb-126f-4926-ba12-ac25fa54c057",
   "createdAt": "2026-09-20T01:00:18.315Z",
-  "updatedAt": "2026-10-18T02:58:57.208Z",
+  "updatedAt": "2026-10-18T03:04:15.465Z",
   "isArchived": false,
-  "versionId": "887ca5a0-3814-424c-8bd6-f0a06a998fad",
+  "versionId": "c7819e4b-e3b8-4ba4-997b-6b9753c35795",
   "triggerCount": 1,
   "nodes": [
     {
@@ -23,7 +23,7 @@
       "typeVersion": 1.4,
       "position": [
         0,
-        0
+        16
       ],
       "id": "789f14a8-0a4a-4e21-ae1f-f2a3467919d7",
       "name": "Schedule Trigger"
@@ -36,8 +36,8 @@
       "type": "n8n-nodes-base.n8n",
       "typeVersion": 1,
       "position": [
-        176,
-        0
+        224,
+        16
       ],
       "id": "fe8593fe-7e10-492e-8583-e0335c629957",
       "name": "Get many workflows",
@@ -75,8 +75,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        400,
-        0
+        448,
+        16
       ],
       "id": "9f48ead7-0ac2-48af-a9ba-b3bda660e787",
       "name": "If"
@@ -103,7 +103,7 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        1360,
+        1344,
         -176
       ],
       "id": "f2ca58e2-d6df-496c-a930-b92df1723190",
@@ -132,13 +132,13 @@
           "cachedResultName": "Fluxos-n8n",
           "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
         },
-        "filePath": "="
+        "filePath": "=workflows"
       },
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        624,
-        -16
+        672,
+        16
       ],
       "id": "787adc21-a345-4ddc-9cff-d588d296e987",
       "name": "List files",
@@ -152,13 +152,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// Resgata os dados usando os nomes exatos dos nós que definimos nos Passos 1 e 2\nconst n8nWorkflows = $('Get many workflows').all();\nconst githubFiles = $('List files').all();\n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Limpa o nome do fluxo removendo caracteres especiais que quebram caminhos de arquivo\n  const safeName = wf.name.replace(/[^a-zA-Z0-9 \\-_]/g, '').trim();\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Verifica se a pasta no repositório já possui um arquivo que inicie com esse ID\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id} -`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O arquivo tem o nome correto. Marcamos para ATUALIZAR.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O fluxo foi renomeado! Marcamos o arquivo antigo para DELETAR, e o novo para CRIAR.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // O fluxo é novo, nunca foi feito backup. Marcamos para CRIAR do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `New Backup: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
+        "jsCode": "// Resgata os dados usando os nomes exatos dos nós que definimos nos Passos 1 e 2\nconst n8nWorkflows = $('Get many workflows').all();\nconst githubFiles = $('List files').all();\n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Limpa o nome do fluxo removendo caracteres especiais que quebram caminhos de arquivo\n  const safeName = wf.name.replace(/[^a-zA-Z0-9 \\-_]/g, '').trim();\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Verifica se a pasta no repositório já possui um arquivo que inicie com esse ID\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id} -`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O arquivo tem o nome correto. Marcamos para ATUALIZAR.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha, id: wf.id }\n      });\n    } else {\n      // O fluxo foi renomeado! Marcamos o arquivo antigo para DELETAR, e o novo para CRIAR.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha, id: wf.id }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}`, id: wf.id }\n      });\n    }\n  } else {\n    // O fluxo é novo, nunca foi feito backup. Marcamos para CRIAR do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `New Backup: ${wf.name}`, id: wf.id }\n    });\n  }\n}\n\nreturn operations;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        848,
-        -16
+        896,
+        16
       ],
       "id": "6f0d3a9a-4284-42d0-a8d8-5c4237c04b5b",
       "name": "Code in JavaScript"
@@ -246,8 +246,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        1072,
-        -32
+        1120,
+        0
       ],
       "id": "492c101c-e15b-4f66-9684-6ce5faa4693d",
       "name": "Switch"
@@ -275,8 +275,8 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        1392,
-        144
+        1344,
+        208
       ],
       "id": "0c76cc53-12d0-433b-a278-fac48643bed9",
       "name": "Edit a file",
@@ -310,8 +310,8 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        1376,
-        -16
+        1344,
+        16
       ],
       "id": "fb23720c-1229-4f76-a340-d27494146a00",
       "name": "Delete a file",
