@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "942054fb-126f-4926-ba12-ac25fa54c057",
   "createdAt": "2026-09-20T01:00:18.315Z",
-  "updatedAt": "2026-10-18T03:17:40.158Z",
+  "updatedAt": "2026-10-18T03:20:00.044Z",
   "isArchived": false,
-  "versionId": "13b4b2f9-6f33-4580-8245-b5090008a8b3",
+  "versionId": "29971b4a-a071-48b1-b666-e957e3b7e75f",
   "triggerCount": 1,
   "nodes": [
     {
@@ -403,6 +403,13 @@
     },
     "If": {
       "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Code in JavaScript",
