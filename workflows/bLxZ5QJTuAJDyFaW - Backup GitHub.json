@@ -2,11 +2,11 @@
   "id": "bLxZ5QJTuAJDyFaW",
   "name": "Backup GitHub",
   "active": true,
-  "activeVersionId": "942054fb-126f-4926-ba12-ac25fa54c057",
+  "activeVersionId": "e484906d-3145-4f35-bfff-2a87d1fdae8c",
   "createdAt": "2026-09-20T01:00:18.315Z",
-  "updatedAt": "2026-10-18T03:20:58.630Z",
+  "updatedAt": "2026-10-18T03:47:57.880Z",
   "isArchived": false,
-  "versionId": "2b00aa50-2e60-4e48-ac4a-e03c21b578c6",
+  "versionId": "6957dc53-6b6b-4070-aeda-8a4093e9ae93",
   "triggerCount": 1,
   "nodes": [
     {
@@ -120,7 +120,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Pega apenas os fluxos que passaram no seu nó 'If' (modificados na última 1h)\nconst n8nWorkflows = $input.all(); \n\n// Pega todos os arquivos de backup atuais lá do nó do GitHub\nconst githubFiles = $('List files').all(); \n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Mantendo exatamente o seu padrão de formatação\n  const safeName = wf.name;\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Procura um arquivo no GitHub que comece com o ID deste fluxo\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id}-`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O nome é o mesmo. Apenas atualiza o arquivo existente.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O nome mudou! Precisamos deletar o arquivo velho e criar um novo.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // Fluxo novo, não tem backup ainda. Cria do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Criado: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
+        "jsCode": "// Pega apenas os fluxos que passaram no seu nó 'If' (modificados na última 1h)\nconst n8nWorkflows = $input.all(); \n\n// Pega todos os arquivos de backup atuais lá do nó do GitHub\nconst githubFiles = $('List files').all(); \n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Mantendo exatamente o seu padrão de formatação\n  const safeName = wf.name;\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Procura um arquivo no GitHub que comece com o ID deste fluxo\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id} -`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O nome é o mesmo. Apenas atualiza o arquivo existente.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O nome mudou! Precisamos deletar o arquivo velho e criar um novo.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // Fluxo novo, não tem backup ainda. Cria do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Criado: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -410,13 +410,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -454,7 +448,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "942054fb-126f-4926-ba12-ac25fa54c057",
+    "versionId": "e484906d-3145-4f35-bfff-2a87d1fdae8c",
     "workflowId": "bLxZ5QJTuAJDyFaW",
     "nodes": [
       {
@@ -471,7 +465,7 @@
         "typeVersion": 1.4,
         "position": [
           0,
-          0
+          16
         ],
         "id": "789f14a8-0a4a-4e21-ae1f-f2a3467919d7",
         "name": "Schedule Trigger"
@@ -484,15 +478,258 @@
         "type": "n8n-nodes-base.n8n",
         "typeVersion": 1,
         "position": [
-          176,
-          0
+          448,
+          16
         ],
         "id": "fe8593fe-7e10-492e-8583-e0335c629957",
         "name": "Get many workflows",
+        "executeOnce": true,
         "credentials": {
           "n8nApi": {
             "id": "pyU7jK3RndTqVISo",
             "name": "Moruan n8n"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "={{ $json.path }}",
+          "fileContent": "={{ $json.content }}",
+          "commitMessage": "={{ $json.commitMessage }}"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          1344,
+          -176
+        ],
+        "id": "f2ca58e2-d6df-496c-a930-b92df1723190",
+        "name": "Create a file",
+        "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "list",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "=workflows"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          224,
+          16
+        ],
+        "id": "787adc21-a345-4ddc-9cff-d588d296e987",
+        "name": "List files",
+        "webhookId": "461a4a2b-1d74-4d73-84f2-1f08450b7610",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Pega apenas os fluxos que passaram no seu nó 'If' (modificados na última 1h)\nconst n8nWorkflows = $input.all(); \n\n// Pega todos os arquivos de backup atuais lá do nó do GitHub\nconst githubFiles = $('List files').all(); \n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Mantendo exatamente o seu padrão de formatação\n  const safeName = wf.name;\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Procura um arquivo no GitHub que comece com o ID deste fluxo\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id}-`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O nome é o mesmo. Apenas atualiza o arquivo existente.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O nome mudou! Precisamos deletar o arquivo velho e criar um novo.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // Fluxo novo, não tem backup ainda. Cria do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Criado: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          896,
+          16
+        ],
+        "id": "6f0d3a9a-4284-42d0-a8d8-5c4237c04b5b",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "create",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "d47d04a4-c707-4114-b796-33d02cf27da3"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "create"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "5a0276e7-0b18-4ebd-a031-2453da0d2bf0",
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "delete",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "delete"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "fa81a45d-42c1-46a4-96c6-dbe05b63a3ab",
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "update",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "edit"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1120,
+          0
+        ],
+        "id": "492c101c-e15b-4f66-9684-6ce5faa4693d",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "edit",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "={{ $json.path }}",
+          "fileContent": "={{ $json.content }}",
+          "commitMessage": "={{ $json.commitMessage }}"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          1344,
+          208
+        ],
+        "id": "0c76cc53-12d0-433b-a278-fac48643bed9",
+        "name": "Edit a file",
+        "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "delete",
+          "owner": {
+            "__rl": true,
+            "value": "https://github.com/Moruan06",
+            "mode": "url"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "Fluxos-n8n",
+            "mode": "list",
+            "cachedResultName": "Fluxos-n8n",
+            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
+          },
+          "filePath": "={{ $json.path }}",
+          "commitMessage": "={{ $json.commitMessage }}"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          1344,
+          16
+        ],
+        "id": "fb23720c-1229-4f76-a340-d27494146a00",
+        "name": "Delete a file",
+        "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
+        "credentials": {
+          "githubApi": {
+            "id": "gGIzg3elk92MKWbm",
+            "name": "Moruan GitHub"
           }
         }
       },
@@ -523,119 +760,11 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          400,
-          0
+          672,
+          16
         ],
         "id": "9f48ead7-0ac2-48af-a9ba-b3bda660e787",
         "name": "If"
-      },
-      {
-        "parameters": {
-          "resource": "file",
-          "operation": "edit",
-          "owner": {
-            "__rl": true,
-            "value": "https://github.com/Moruan06",
-            "mode": "url"
-          },
-          "repository": {
-            "__rl": true,
-            "value": "Fluxos-n8n",
-            "mode": "list",
-            "cachedResultName": "Fluxos-n8n",
-            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
-          },
-          "filePath": "=workflows/{{ $json.id }}-{{ $json.name.replace(/\\W+/g, '-') }}.json",
-          "fileContent": "={{ JSON.stringify($json, null, 2) }}",
-          "commitMessage": "=Update: {{ $json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
-        },
-        "type": "n8n-nodes-base.github",
-        "typeVersion": 1.1,
-        "position": [
-          848,
-          -96
-        ],
-        "id": "7cf7e285-64c5-49c1-a289-dbfdc780c501",
-        "name": "Edit a file",
-        "webhookId": "5a851882-8f5d-4749-b087-18e135be566e",
-        "credentials": {
-          "githubApi": {
-            "id": "gGIzg3elk92MKWbm",
-            "name": "Moruan GitHub"
-          }
-        },
-        "onError": "continueRegularOutput"
-      },
-      {
-        "parameters": {
-          "resource": "file",
-          "owner": {
-            "__rl": true,
-            "value": "https://github.com/Moruan06",
-            "mode": "url"
-          },
-          "repository": {
-            "__rl": true,
-            "value": "Fluxos-n8n",
-            "mode": "list",
-            "cachedResultName": "Fluxos-n8n",
-            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
-          },
-          "filePath": "=workflows/{{ $('Get many workflows').item.json.id }}-{{ $('Get many workflows').item.json.name.replace(/\\W+/g, '-') }}.json",
-          "fileContent": "={{ JSON.stringify($('Get many workflows').item.json, null, 2) }}",
-          "commitMessage": "=Criado: {{ $('Get many workflows').item.json.name }} em {{ $now.toFormat('dd/MM/yyyy HH:mm:ss') }}"
-        },
-        "type": "n8n-nodes-base.github",
-        "typeVersion": 1.1,
-        "position": [
-          848,
-          80
-        ],
-        "id": "f2ca58e2-d6df-496c-a930-b92df1723190",
-        "name": "Create a file",
-        "webhookId": "87990369-bfac-4d4c-9500-684bf08ea11d",
-        "credentials": {
-          "githubApi": {
-            "id": "gGIzg3elk92MKWbm",
-            "name": "Moruan GitHub"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "resource": "file",
-          "operation": "get",
-          "owner": {
-            "__rl": true,
-            "value": "https://github.com/Moruan06",
-            "mode": "url"
-          },
-          "repository": {
-            "__rl": true,
-            "value": "Fluxos-n8n",
-            "mode": "list",
-            "cachedResultName": "Fluxos-n8n",
-            "cachedResultUrl": "https://github.com/Moruan06/Fluxos-n8n"
-          },
-          "filePath": "=workflows/{{ $json.id }}-{{ $json.name.replace(/\\W+/g, '-') }}.json",
-          "additionalParameters": {}
-        },
-        "type": "n8n-nodes-base.github",
-        "typeVersion": 1.1,
-        "position": [
-          624,
-          -16
-        ],
-        "id": "787adc21-a345-4ddc-9cff-d588d296e987",
-        "name": "Get a file",
-        "webhookId": "461a4a2b-1d74-4d73-84f2-1f08450b7610",
-        "credentials": {
-          "githubApi": {
-            "id": "gGIzg3elk92MKWbm",
-            "name": "Moruan GitHub"
-          }
-        },
-        "onError": "continueErrorOutput"
       }
     ],
     "connections": {
@@ -643,7 +772,7 @@
         "main": [
           [
             {
-              "node": "Get many workflows",
+              "node": "List files",
               "type": "main",
               "index": 0
             }
@@ -661,47 +790,78 @@
           ]
         ]
       },
-      "If": {
+      "List files": {
         "main": [
           [
             {
-              "node": "Get a file",
+              "node": "Get many workflows",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Switch",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Edit a file": {
+      "Switch": {
         "main": [
-          []
-        ]
-      },
-      "Get a file": {
-        "main": [
-          [
-            {
-              "node": "Edit a file",
-              "type": "main",
-              "index": 0
-            }
-          ],
           [
             {
               "node": "Create a file",
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Delete a file",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit a file",
+              "type": "main",
+              "index": 0
+            }
           ]
+        ]
+      },
+      "Delete a file": {
+        "main": [
+          []
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
         ]
       }
     },
     "nodeGroups": [],
     "authors": "Moruan Matar",
-    "name": "Version 942054fb",
+    "name": "Version e484906d",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-09-20T02:31:10.624Z",
-    "updatedAt": "2026-09-20T02:31:13.000Z"
+    "createdAt": "2026-10-18T03:46:23.307Z",
+    "updatedAt": "2026-10-18T03:47:12.000Z"
   }
 }
