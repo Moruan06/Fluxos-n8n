@@ -2,7 +2,7 @@
   "id": "bLxZ5QJTuAJDyFaW",
   "name": "Backup GitHub",
   "active": true,
-  "activeVersionId": "e484906d-3145-4f35-bfff-2a87d1fdae8c",
+  "activeVersionId": "6957dc53-6b6b-4070-aeda-8a4093e9ae93",
   "createdAt": "2026-09-20T01:00:18.315Z",
   "updatedAt": "2026-10-18T03:47:57.880Z",
   "isArchived": false,
@@ -448,7 +448,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "e484906d-3145-4f35-bfff-2a87d1fdae8c",
+    "versionId": "6957dc53-6b6b-4070-aeda-8a4093e9ae93",
     "workflowId": "bLxZ5QJTuAJDyFaW",
     "nodes": [
       {
@@ -562,7 +562,7 @@
       },
       {
         "parameters": {
-          "jsCode": "// Pega apenas os fluxos que passaram no seu nó 'If' (modificados na última 1h)\nconst n8nWorkflows = $input.all(); \n\n// Pega todos os arquivos de backup atuais lá do nó do GitHub\nconst githubFiles = $('List files').all(); \n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Mantendo exatamente o seu padrão de formatação\n  const safeName = wf.name;\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Procura um arquivo no GitHub que comece com o ID deste fluxo\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id}-`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O nome é o mesmo. Apenas atualiza o arquivo existente.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O nome mudou! Precisamos deletar o arquivo velho e criar um novo.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // Fluxo novo, não tem backup ainda. Cria do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Criado: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
+          "jsCode": "// Pega apenas os fluxos que passaram no seu nó 'If' (modificados na última 1h)\nconst n8nWorkflows = $input.all(); \n\n// Pega todos os arquivos de backup atuais lá do nó do GitHub\nconst githubFiles = $('List files').all(); \n\nconst operations = [];\n\nfor (const item of n8nWorkflows) {\n  const wf = item.json;\n  \n  // Mantendo exatamente o seu padrão de formatação\n  const safeName = wf.name;\n  const expectedPath = `workflows/${wf.id} - ${safeName}.json`;\n\n  // Procura um arquivo no GitHub que comece com o ID deste fluxo\n  const existingFile = githubFiles.find(f => f.json.name && f.json.name.startsWith(`${wf.id} -`));\n\n  const fileContent = JSON.stringify(wf, null, 2);\n\n  if (existingFile) {\n    if (existingFile.json.path === expectedPath) {\n      // O nome é o mesmo. Apenas atualiza o arquivo existente.\n      operations.push({\n        json: { action: 'update', path: expectedPath, content: fileContent, commitMessage: `Update: ${wf.name}`, sha: existingFile.json.sha }\n      });\n    } else {\n      // O nome mudou! Precisamos deletar o arquivo velho e criar um novo.\n      operations.push({\n        json: { action: 'delete', path: existingFile.json.path, commitMessage: `Rename (Del): ${existingFile.json.name}`, sha: existingFile.json.sha }\n      });\n      operations.push({\n        json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Rename (Add): ${wf.name}` }\n      });\n    }\n  } else {\n    // Fluxo novo, não tem backup ainda. Cria do zero.\n    operations.push({\n      json: { action: 'create', path: expectedPath, content: fileContent, commitMessage: `Criado: ${wf.name}` }\n    });\n  }\n}\n\nreturn operations;"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -858,10 +858,10 @@
     },
     "nodeGroups": [],
     "authors": "Moruan Matar",
-    "name": "Version e484906d",
+    "name": "Version 6957dc53",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-10-18T03:46:23.307Z",
-    "updatedAt": "2026-10-18T03:47:12.000Z"
+    "createdAt": "2026-10-18T03:47:57.881Z",
+    "updatedAt": "2026-10-18T03:48:06.000Z"
   }
 }
