@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "942054fb-126f-4926-ba12-ac25fa54c057",
   "createdAt": "2026-09-20T01:00:18.315Z",
-  "updatedAt": "2026-09-20T02:31:10.623Z",
+  "updatedAt": "2026-10-18T00:16:50.910Z",
   "isArchived": false,
-  "versionId": "942054fb-126f-4926-ba12-ac25fa54c057",
+  "versionId": "957c7649-c56a-4043-9dd1-204541a2105a",
   "triggerCount": 1,
   "nodes": [
     {
@@ -30,7 +30,9 @@
     },
     {
       "parameters": {
-        "filters": {},
+        "filters": {
+          "activeWorkflows": false
+        },
         "requestOptions": {}
       },
       "type": "n8n-nodes-base.n8n",
