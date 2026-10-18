@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "70d6e332-4e12-466e-ae2f-955a2c2e59e0",
   "createdAt": "2026-10-11T21:09:00.079Z",
-  "updatedAt": "2026-10-14T20:21:11.516Z",
+  "updatedAt": "2026-10-18T01:59:19.875Z",
   "isArchived": false,
-  "versionId": "70d6e332-4e12-466e-ae2f-955a2c2e59e0",
+  "versionId": "22407046-38a8-48b0-bc33-13b05cb7e988",
   "triggerCount": 1,
   "nodes": [
     {
@@ -509,39 +509,6 @@
     },
     {
       "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g",
-          "mode": "list",
-          "cachedResultName": "BD_RSS (n8n)",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QwQ3DqJPMiYVQCmrK7io5Av9ldZkE5WLdF4uTMyD_3g/edit#gid=0"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        1344,
-        -240
-      ],
-      "id": "97f0b872-a92b-4b42-9df4-32f3c9766c79",
-      "name": "Get row(s) in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "jdOUpayzpEgqvP1X",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "resource": "document",
         "modelId": {
           "__rl": true,
@@ -604,6 +571,58 @@
       ],
       "id": "cfdc87b4-9eb3-4723-999a-71d2ad873031",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "CxACYe7TuZVCusMu",
+          "mode": "list",
+          "cachedResultName": "postID",
+          "cachedResultUrl": "/projects/8hi4bD9zCoonCi82/datatables/CxACYe7TuZVCusMu"
+        },
+        "filters": {
+          "conditions": []
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        -224
+      ],
+      "id": "a47fe2c1-59e6-4a4f-9b66-f5b1961a8b27",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "CxACYe7TuZVCusMu",
+          "mode": "list",
+          "cachedResultName": "postID",
+          "cachedResultUrl": "/projects/8hi4bD9zCoonCi82/datatables/CxACYe7TuZVCusMu"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1456,
+        -48
+      ],
+      "id": "45314b1b-1d4e-4c7e-914d-e657f493e327",
+      "name": "Insert row"
     }
   ],
   "connections": {
@@ -773,17 +792,6 @@
         ]
       ]
     },
-    "Get row(s) in sheet": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
     "Analyze document": {
       "main": [
         [
@@ -815,9 +823,20 @@
             "index": 0
           },
           {
-            "node": "Get row(s) in sheet",
+            "node": "Get row(s)",
             "type": "main",
             "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
