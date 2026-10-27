@@ -4,9 +4,9 @@
   "active": true,
   "activeVersionId": "3cf664dd-ee59-48ff-bc49-e14d1c8f9465",
   "createdAt": "2026-10-11T21:09:00.079Z",
-  "updatedAt": "2026-10-20T20:00:24.625Z",
+  "updatedAt": "2026-10-27T08:00:11.284Z",
   "isArchived": false,
-  "versionId": "bca5acf4-7ca2-447f-8906-01c2d3ae6045",
+  "versionId": "3722d760-d1e4-4115-afd8-9f9e27cf44bb",
   "triggerCount": 1,
   "nodes": [
     {
@@ -311,6 +311,7 @@
       ],
       "id": "16b6a40f-fe51-497d-a34d-79be3e0057b1",
       "name": "Baixar arquivo",
+      "disabled": true,
       "onError": "continueRegularOutput"
     },
     {
@@ -480,7 +481,8 @@
           "id": "pnonuS558l4ltLVh",
           "name": "Conta Moruan"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
